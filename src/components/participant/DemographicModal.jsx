@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
-import { X, UserCheck, Sparkles, Check } from 'lucide-react';
+import { X, UserCheck, Check } from 'lucide-react';
 import { kkuFaculties, residenceZones } from '../../data/mockData';
 
 export const DemographicModal = ({ onClose }) => {
@@ -34,28 +34,51 @@ export const DemographicModal = ({ onClose }) => {
 
   return (
     <div className="modal-backdrop">
-      <div className="modal-content" style={{ maxWidth: '620px' }}>
-        <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: 'var(--color-primary-light)', color: 'var(--color-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div 
+        className="modal-content" 
+        style={{ 
+          maxWidth: '620px', 
+          borderRadius: 'var(--radius-card)', 
+          border: '1px solid var(--color-border-subtle)',
+          boxShadow: 'var(--shadow-dropdown)',
+          padding: 0,
+          overflow: 'hidden'
+        }}
+      >
+        <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--color-border-subtle)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#FFFFFF' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ width: '40px', height: '40px', borderRadius: 'var(--radius-card)', background: 'var(--color-primary-light)', color: 'var(--color-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <UserCheck size={20} />
             </div>
             <div>
-              <h3 className="text-h3" style={{ fontSize: '18px' }}>ข้อมูลประชากรศาสตร์ (Demographic Profile)</h3>
-              <p style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>ข้อมูลนี้ช่วยให้ระบบจับคู่แบบสอบถามที่ตรงกับคุณ 100%</p>
+              <h3 style={{ fontSize: '18px', fontWeight: 600, color: 'var(--color-text-title)', margin: 0 }}>ข้อมูลประชากรศาสตร์ (Demographic Profile)</h3>
+              <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', margin: 0 }}>ข้อมูลนี้ช่วยให้ระบบจับคู่แบบสอบถามที่ตรงกับคุณ 100%</p>
             </div>
           </div>
-          <button onClick={onClose} style={{ color: 'var(--color-text-muted)' }}><X size={20} /></button>
+          <button 
+            onClick={onClose} 
+            style={{ 
+              color: 'var(--color-text-muted)', 
+              background: 'transparent', 
+              border: 'none', 
+              cursor: 'pointer',
+              display: 'flex',
+              padding: '6px',
+              borderRadius: 'var(--radius-input)'
+            }}
+          >
+            <X size={20} />
+          </button>
         </div>
 
-        <form onSubmit={handleSave} style={{ padding: '24px' }}>
+        <form onSubmit={handleSave} style={{ padding: '24px', backgroundColor: '#FFFFFF' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>คณะ</label>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: 'var(--color-text-body)', marginBottom: '6px' }}>คณะ</label>
               <select
                 value={faculty}
                 onChange={(e) => setFaculty(e.target.value)}
-                style={{ width: '100%', padding: '9px 12px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-border)', backgroundColor: '#FFFFFF', fontSize: '13px' }}
+                style={{ width: '100%', height: '42px', padding: '0 12px', borderRadius: 'var(--radius-input)', border: '1px solid var(--color-border)', backgroundColor: '#FFFFFF', fontSize: '14px', color: 'var(--color-text-body)' }}
               >
                 {kkuFaculties.filter(f => !f.includes('ทุกคณะ')).map(f => (
                   <option key={f} value={f}>{f}</option>
@@ -64,23 +87,23 @@ export const DemographicModal = ({ onClose }) => {
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>สาขาวิชา</label>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: 'var(--color-text-body)', marginBottom: '6px' }}>สาขาวิชา</label>
               <input
                 type="text"
                 value={major}
                 onChange={(e) => setMajor(e.target.value)}
-                style={{ width: '100%', padding: '9px 12px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-border)' }}
+                style={{ width: '100%', height: '42px', padding: '0 12px', borderRadius: 'var(--radius-input)', border: '1px solid var(--color-border)', fontSize: '14px', color: 'var(--color-text-body)' }}
               />
             </div>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '14px', marginBottom: '16px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>ชั้นปี</label>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: 'var(--color-text-body)', marginBottom: '6px' }}>ชั้นปี</label>
               <select
                 value={year}
                 onChange={(e) => setYear(e.target.value)}
-                style={{ width: '100%', padding: '9px 12px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-border)', backgroundColor: '#FFFFFF', fontSize: '13px' }}
+                style={{ width: '100%', height: '42px', padding: '0 12px', borderRadius: 'var(--radius-input)', border: '1px solid var(--color-border)', backgroundColor: '#FFFFFF', fontSize: '14px', color: 'var(--color-text-body)' }}
               >
                 <option value="ชั้นปีที่ 1">ชั้นปีที่ 1</option>
                 <option value="ชั้นปีที่ 2">ชั้นปีที่ 2</option>
@@ -92,11 +115,11 @@ export const DemographicModal = ({ onClose }) => {
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>เพศสภาพ</label>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: 'var(--color-text-body)', marginBottom: '6px' }}>เพศสภาพ</label>
               <select
                 value={gender}
                 onChange={(e) => setGender(e.target.value)}
-                style={{ width: '100%', padding: '9px 12px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-border)', backgroundColor: '#FFFFFF', fontSize: '13px' }}
+                style={{ width: '100%', height: '42px', padding: '0 12px', borderRadius: 'var(--radius-input)', border: '1px solid var(--color-border)', backgroundColor: '#FFFFFF', fontSize: '14px', color: 'var(--color-text-body)' }}
               >
                 <option value="ชาย">ชาย</option>
                 <option value="หญิง">หญิง</option>
@@ -106,24 +129,24 @@ export const DemographicModal = ({ onClose }) => {
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>อายุ (ปี)</label>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: 'var(--color-text-body)', marginBottom: '6px' }}>อายุ (ปี)</label>
               <input
                 type="number"
                 min="16"
                 max="60"
                 value={age}
                 onChange={(e) => setAge(e.target.value)}
-                style={{ width: '100%', padding: '9px 12px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-border)' }}
+                style={{ width: '100%', height: '42px', padding: '0 12px', borderRadius: 'var(--radius-input)', border: '1px solid var(--color-border)', fontSize: '14px', color: 'var(--color-text-body)' }}
               />
             </div>
           </div>
 
           <div style={{ marginBottom: '16px' }}>
-            <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>พื้นที่พักอาศัยรอบ มข.</label>
+            <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: 'var(--color-text-body)', marginBottom: '6px' }}>พื้นที่พักอาศัยรอบ มข.</label>
             <select
               value={residenceZone}
               onChange={(e) => setResidenceZone(e.target.value)}
-              style={{ width: '100%', padding: '9px 12px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-border)', backgroundColor: '#FFFFFF', fontSize: '13px' }}
+              style={{ width: '100%', height: '42px', padding: '0 12px', borderRadius: 'var(--radius-input)', border: '1px solid var(--color-border)', backgroundColor: '#FFFFFF', fontSize: '14px', color: 'var(--color-text-body)' }}
             >
               {residenceZones.filter(r => !r.includes('ทุกพื้นที่')).map(r => (
                 <option key={r} value={r}>{r}</option>
@@ -133,11 +156,11 @@ export const DemographicModal = ({ onClose }) => {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '24px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>ยานพาหนะหลัก</label>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: 'var(--color-text-body)', marginBottom: '6px' }}>ยานพาหนะหลัก</label>
               <select
                 value={primaryTransport}
                 onChange={(e) => setPrimaryTransport(e.target.value)}
-                style={{ width: '100%', padding: '9px 12px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-border)', backgroundColor: '#FFFFFF', fontSize: '13px' }}
+                style={{ width: '100%', height: '42px', padding: '0 12px', borderRadius: 'var(--radius-input)', border: '1px solid var(--color-border)', backgroundColor: '#FFFFFF', fontSize: '14px', color: 'var(--color-text-body)' }}
               >
                 <option value="รถจักรยานยนต์ส่วนตัว">รถจักรยานยนต์ส่วนตัว</option>
                 <option value="รถ Shuttle Bus มข. (KST)">รถ Shuttle Bus มข. (KST)</option>
@@ -147,11 +170,11 @@ export const DemographicModal = ({ onClose }) => {
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>แอปส่งอาหารที่ใช้ประจำ</label>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: 'var(--color-text-body)', marginBottom: '6px' }}>แอปส่งอาหารที่ใช้ประจำ</label>
               <select
                 value={deliveryApp}
                 onChange={(e) => setDeliveryApp(e.target.value)}
-                style={{ width: '100%', padding: '9px 12px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-border)', backgroundColor: '#FFFFFF', fontSize: '13px' }}
+                style={{ width: '100%', height: '42px', padding: '0 12px', borderRadius: 'var(--radius-input)', border: '1px solid var(--color-border)', backgroundColor: '#FFFFFF', fontSize: '14px', color: 'var(--color-text-body)' }}
               >
                 <option value="LINE MAN">LINE MAN</option>
                 <option value="Grab">Grab</option>
@@ -161,9 +184,13 @@ export const DemographicModal = ({ onClose }) => {
             </div>
           </div>
 
-          <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', borderTop: '1px solid var(--color-border)', paddingTop: '16px' }}>
-            <button type="button" onClick={onClose} className="btn btn-secondary">ยกเลิก</button>
-            <button type="submit" className="btn btn-primary"><Check size={16} /> บันทึกโปรไฟล์</button>
+          <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', borderTop: '1px solid var(--color-border-subtle)', paddingTop: '18px' }}>
+            <button type="button" onClick={onClose} className="btn-pill btn-pill-secondary">
+              ยกเลิก
+            </button>
+            <button type="submit" className="btn-pill btn-pill-primary">
+              <Check size={16} /> บันทึกโปรไฟล์
+            </button>
           </div>
         </form>
       </div>
