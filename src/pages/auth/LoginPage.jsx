@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { Mail, Lock, ArrowRight, AlertCircle } from 'lucide-react';
+import { ShieldCheck, Mail, Lock, ArrowRight, Sparkles, CheckCircle2, AlertCircle } from 'lucide-react';
 
 export const LoginPage = ({ onNavigate }) => {
   const { login, loginWithGoogle, isLoading } = useAuth();
@@ -26,67 +26,76 @@ export const LoginPage = ({ onNavigate }) => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-70px)] flex items-center justify-center p-8 px-4 bg-gradient-to-b from-slate-50 to-blue-50/40">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl border border-slate-200 p-8 sm:p-9">
+    <div style={{ minHeight: 'calc(100vh - 70px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '32px 16px', background: 'linear-gradient(180deg, #F8FAFC 0%, #EFF6FF 100%)' }}>
+      <div style={{ maxWidth: '440px', width: '100%', background: '#FFFFFF', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-xl)', border: '1px solid var(--color-border)', padding: '36px 32px' }}>
         {/* Header */}
-        <div className="text-center mb-7">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-blue-800 text-white flex items-center justify-center font-black text-xl mx-auto mb-3.5 shadow-md">
+        <div style={{ textAlign: 'center', marginBottom: '28px' }}>
+          <div
+            style={{
+              width: '48px',
+              height: '48px',
+              borderRadius: '12px',
+              background: 'linear-gradient(135deg, #2563EB, #1D4ED8)',
+              color: '#FFFFFF',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontWeight: 800,
+              fontSize: '22px',
+              margin: '0 auto 14px auto',
+              boxShadow: '0 4px 12px rgba(37,99,235,0.3)'
+            }}
+          >
             K
           </div>
-          <h2 className="text-xl font-bold text-slate-900 mb-1.5">
+          <h2 className="text-h2" style={{ fontSize: '22px', marginBottom: '6px' }}>
             เข้าสู่ระบบ KKU Survey
           </h2>
-          <p className="text-xs text-slate-500">
+          <p style={{ color: 'var(--color-text-muted)', fontSize: '13px' }}>
             บัญชีเดี่ยวสำหรับตอบแบบสอบถาม และสร้างงานวิจัย
           </p>
         </div>
 
         {/* Error message */}
         {errorMessage && (
-          <div className="bg-red-50 border border-red-200 text-red-700 p-3 rounded-xl text-xs mb-4 flex gap-2 items-center">
-            <AlertCircle size={16} className="shrink-0" />
+          <div style={{ backgroundColor: '#FEF2F2', border: '1px solid #FCA5A5', color: '#991B1B', padding: '10px 14px', borderRadius: 'var(--radius-sm)', fontSize: '13px', marginBottom: '18px', display: 'flex', gap: '8px', alignItems: 'center' }}>
+            <AlertCircle size={16} />
             <span>{errorMessage}</span>
           </div>
         )}
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="mb-5 space-y-4">
-          <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+        <form onSubmit={handleSubmit} style={{ marginBottom: '20px' }}>
+          <div style={{ marginBottom: '16px' }}>
+            <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>
               อีเมล
             </label>
-            <div className="relative">
-              <Mail size={16} className="absolute left-3 top-3 text-slate-400" />
+            <div style={{ position: 'relative' }}>
+              <Mail size={16} style={{ position: 'absolute', left: '12px', top: '12px', color: 'var(--color-text-muted)' }} />
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="เช่น yourname@kkumail.com"
-                className="w-full pl-9 pr-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                style={{ width: '100%', padding: '10px 14px 10px 38px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-border)', outline: 'none', fontSize: '14px' }}
               />
             </div>
           </div>
 
-          <div>
-            <div className="flex justify-between items-center mb-1.5">
-              <label className="text-xs font-semibold text-slate-700">รหัสผ่าน</label>
-              <a
-                href="#forgot"
-                onClick={(e) => { e.preventDefault(); alert('ระบบรีเซ็ตรหัสผ่านจะส่งลิงก์ไปยังอีเมลของคุณ'); }}
-                className="text-xs text-blue-600 hover:text-blue-700 font-medium"
-              >
-                ลืมรหัสผ่าน?
-              </a>
+          <div style={{ marginBottom: '20px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+              <label style={{ fontSize: '13px', fontWeight: 600 }}>รหัสผ่าน</label>
+              <a href="#forgot" onClick={(e) => { e.preventDefault(); alert('ระบบรีเซ็ตรหัสผ่านจะส่งลิงก์ไปยังอีเมลของคุณ'); }} style={{ fontSize: '11px', color: 'var(--color-primary)' }}>ลืมรหัสผ่าน?</a>
             </div>
-            <div className="relative">
-              <Lock size={16} className="absolute left-3 top-3 text-slate-400" />
+            <div style={{ position: 'relative' }}>
+              <Lock size={16} style={{ position: 'absolute', left: '12px', top: '12px', color: 'var(--color-text-muted)' }} />
               <input
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-9 pr-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                style={{ width: '100%', padding: '10px 14px 10px 38px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-border)', outline: 'none', fontSize: '14px' }}
               />
             </div>
           </div>
@@ -94,48 +103,52 @@ export const LoginPage = ({ onNavigate }) => {
           <button
             type="submit"
             disabled={isLoading}
-            className="btn btn-primary w-full justify-center py-2.5 text-sm font-semibold"
+            className="btn btn-primary"
+            style={{ width: '100%', padding: '11px', fontSize: '15px', fontWeight: 600 }}
           >
             {isLoading ? 'กำลังเข้าสู่ระบบ...' : (
               <>
-                เข้าสู่ระบบ <ArrowRight size={16} className="ml-1" />
+                เข้าสู่ระบบ <ArrowRight size={16} />
               </>
             )}
           </button>
         </form>
 
         {/* Divider */}
-        <div className="flex items-center gap-3 mb-5">
-          <div className="flex-1 h-px bg-slate-200" />
-          <span className="text-xs text-slate-400">หรือ</span>
-          <div className="flex-1 h-px bg-slate-200" />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+          <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--color-border)' }} />
+          <span style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>หรือ</span>
+          <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--color-border)' }} />
         </div>
 
         {/* Google KKU Mail Sign-in */}
         <button
           type="button"
           onClick={() => handleGoogleLogin('student.kku@kkumail.com')}
-          className="btn btn-secondary w-full justify-center py-2.5 text-xs font-semibold flex items-center gap-2 mb-4 border-slate-300 hover:bg-slate-50"
+          className="btn btn-secondary"
+          style={{ width: '100%', padding: '10px', fontSize: '13px', fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '16px', borderColor: '#CBD5E1' }}
         >
-          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" className="w-4 h-4" />
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style={{ width: '16px', height: '16px' }} />
           เข้าสู่ระบบด้วย KKU Mail (@kkumail.com)
         </button>
 
         {/* Quick Demo Credentials Help */}
-        <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs text-slate-500 mb-5">
-          <div className="font-semibold text-slate-700 mb-1.5">⚡ บัญชีทดสอบด่วน:</div>
-          <div className="flex gap-1.5 flex-wrap">
+        <div style={{ background: '#F8FAFC', padding: '12px 14px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-border)', fontSize: '11px', color: 'var(--color-text-muted)', marginBottom: '20px' }}>
+          <div style={{ fontWeight: 600, color: 'var(--color-text-main)', marginBottom: '6px' }}>⚡ บัญชีทดสอบด่วน:</div>
+          <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
             <button
               type="button"
               onClick={() => { setEmail('worameth.m@kkumail.com'); setPassword('password123'); }}
-              className="btn btn-sm btn-secondary text-xs py-1 px-2.5"
+              className="btn btn-sm btn-secondary"
+              style={{ padding: '3px 8px', fontSize: '11px' }}
             >
               นศ. Max (ผู้ตอบ/วิจัย)
             </button>
             <button
               type="button"
               onClick={() => { setEmail('admin@kku.ac.th'); setPassword('adminpassword'); }}
-              className="btn btn-sm btn-secondary text-xs py-1 px-2.5"
+              className="btn btn-sm btn-secondary"
+              style={{ padding: '3px 8px', fontSize: '11px' }}
             >
               Admin มข.
             </button>
@@ -143,12 +156,12 @@ export const LoginPage = ({ onNavigate }) => {
         </div>
 
         {/* Register link */}
-        <div className="text-center text-xs text-slate-500">
+        <div style={{ textAlign: 'center', fontSize: '13px', color: 'var(--color-text-muted)' }}>
           ยังไม่มีบัญชีใช่หรือไม่?{' '}
           <button
             type="button"
             onClick={() => onNavigate && onNavigate('register')}
-            className="text-blue-600 font-semibold hover:text-blue-700 ml-1"
+            style={{ color: 'var(--color-primary)', fontWeight: 600, border: 'none', background: 'none', cursor: 'pointer', padding: 0 }}
           >
             สมัครสมาชิกใหม่ที่นี่
           </button>
