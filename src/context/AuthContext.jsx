@@ -171,6 +171,51 @@ export const AuthProvider = ({ children }) => {
   // Register New Unified User
   const register = async (formData) => {
     setIsLoading(true);
+
+    if (isSupabaseConfigured && supabase) {
+      try {
+        const { data, error } = await supabase.auth.signUp({
+          email: formData.email,
+          password: formData.password,
+          options: {
+            data: {
+              full_name: formData.full_name
+            }
+          }
+        });
+        if (error) throw error;
+        if (data?.user) {
+          const newProfile = {
+            id: data.user.id,
+            email: formData.email,
+            full_name: formData.full_name,
+            student_id: formData.student_id || 'ไม่ระบุ',
+            university: 'มหาวิทยาลัยขอนแก่น',
+            faculty: formData.faculty || 'คณะบริหารธุรกิจและการบัญชี (KKUBS)',
+            major: formData.major || 'ทั่วไป',
+            year_of_study: formData.year_of_study || 'ชั้นปีที่ 1',
+            gender: formData.gender || 'ไม่ระบุ',
+            age: Number(formData.age) || 20,
+            residence_zone: formData.residence_zone || 'หอพักใน มข. (หอพักนักศึกษา)',
+            monthly_expense: '5,000 - 8,000 บาท',
+            primary_transport: 'รถจักรยานยนต์ส่วนตัว',
+            delivery_app: 'LINE MAN',
+            verification_status: 'unverified',
+            reward_balance: 0.00,
+            research_budget: 0.00,
+            is_admin: false
+          };
+          await supabase.from('profiles').upsert(newProfile);
+          setUserProfile(newProfile);
+          setIsLoading(false);
+          return { success: true };
+        }
+      } catch (err) {
+        setIsLoading(false);
+        return { success: false, message: err.message };
+      }
+    }
+
     await new Promise(r => setTimeout(r, 500));
 
     // Check if email already exists

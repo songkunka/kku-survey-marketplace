@@ -118,9 +118,11 @@ CREATE POLICY "Public read active projects" ON public.research_projects
 CREATE POLICY "Users manage own projects" ON public.research_projects
   FOR ALL USING (auth.uid() = creator_id);
 
--- Policies: ผู้ใช้อ่านและอัปเดตโปรไฟล์ตนเองได้
+-- Policies: ผู้ใช้อ่าน สร้าง และอัปเดตโปรไฟล์ตนเองได้
 CREATE POLICY "Users view own profile" ON public.profiles
   FOR SELECT USING (auth.uid() = id);
+CREATE POLICY "Users insert own profile" ON public.profiles
+  FOR INSERT WITH CHECK (auth.uid() = id);
 CREATE POLICY "Users update own profile" ON public.profiles
   FOR UPDATE USING (auth.uid() = id);
 
