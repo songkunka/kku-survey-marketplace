@@ -1,16 +1,21 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
-import { Coins, CheckCircle, Clock, ArrowRight, ShieldCheck, Award, Sparkles } from 'lucide-react';
+import { Coins, CheckCircle, Clock, ArrowRight, ShieldCheck, ShieldAlert, Sparkles, SlidersHorizontal } from 'lucide-react';
 import { SurveyRunnerModal } from '../../components/participant/SurveyRunnerModal';
 import { WithdrawalModal } from '../../components/participant/WithdrawalModal';
+import { KYCModal } from '../../components/participant/KYCModal';
+import { DemographicModal } from '../../components/participant/DemographicModal';
 
 export const ParticipantDashboard = ({ setActiveTab }) => {
   const { participant, surveys, transactions } = useApp();
   const [selectedSurvey, setSelectedSurvey] = useState(null);
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
+  const [showKYCModal, setShowKYCModal] = useState(false);
+  const [showDemoModal, setShowDemoModal] = useState(false);
 
   const availableSurveys = surveys.filter(s => s.status === 'Active');
   const completedCount = participant.completedSurveyIds.length;
+  const isVerified = participant.verificationStatus === 'Verified';
 
   return (
     <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
@@ -26,19 +31,42 @@ export const ParticipantDashboard = ({ setActiveTab }) => {
           alignItems: 'center',
           flexWrap: 'wrap',
           gap: '20px',
-          marginBottom: '32px',
+          marginBottom: '28px',
           boxShadow: '0 8px 20px rgba(37,99,235,0.2)'
         }}
       >
         <div>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.15)', padding: '4px 10px', borderRadius: '4px', fontSize: '12px', marginBottom: '10px' }}>
-            <ShieldCheck size={14} /> บัญชีผ่านการยืนยันตัวตน (Verified Student)
-          </div>
+          <button
+            onClick={() => setShowKYCModal(true)}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              background: isVerified ? 'rgba(255,255,255,0.18)' : '#F59E0B',
+              color: '#FFFFFF',
+              padding: '4px 10px',
+              borderRadius: '4px',
+              fontSize: '12px',
+              marginBottom: '10px',
+              cursor: 'pointer',
+              border: 'none'
+            }}
+          >
+            {isVerified ? <ShieldCheck size={14} /> : <ShieldAlert size={14} />}
+            <span>สถานะ: {participant.verificationStatus === 'Verified' ? 'ยืนยันตัวตนแล้ว (Verified)' : participant.verificationStatus === 'Pending' ? 'กำลังตรวจสอบ (Pending)' : 'ยังไม่ยืนยัน (กดเพื่อยืนยัน)'}</span>
+          </button>
+
           <h2 style={{ fontSize: '26px', fontWeight: 700, marginBottom: '6px' }}>
             สวัสดีคุณ {participant.name} 👋
           </h2>
-          <p style={{ color: '#BFDBFE', fontSize: '14px' }}>
-            {participant.faculty} • {participant.year}
+          <p style={{ color: '#BFDBFE', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+            <span>{participant.faculty} • {participant.year}</span>
+            <button
+              onClick={() => setShowDemoModal(true)}
+              style={{ background: 'rgba(255,255,255,0.15)', color: '#FFFFFF', border: 'none', borderRadius: '4px', padding: '2px 8px', fontSize: '11px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+            >
+              <SlidersHorizontal size={11} /> แก้ไขโปรไฟล์
+            </button>
           </p>
         </div>
 
@@ -80,10 +108,10 @@ export const ParticipantDashboard = ({ setActiveTab }) => {
 
         <div className="card">
           <div style={{ fontSize: '13px', color: 'var(--color-text-muted)', marginBottom: '6px' }}>
-            อัตราแลกเปลี่ยนรางวัล
+            พื้นที่พักอาศัยของคุณ
           </div>
-          <div style={{ fontSize: '24px', fontWeight: 700, color: 'var(--color-success)' }}>
-            1 Credit = ฿1.00
+          <div style={{ fontSize: '18px', fontWeight: 700, color: 'var(--color-text-main)' }}>
+            {participant.residenceZone || 'ย่านกังสดาล'}
           </div>
         </div>
       </div>
@@ -93,7 +121,7 @@ export const ParticipantDashboard = ({ setActiveTab }) => {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
           <div>
             <h3 className="text-h3" style={{ fontSize: '18px' }}>แบบสอบถามแนะนำสำหรับคุณ</h3>
-            <p style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>คัดสรรตามคณะและระดับชั้นปีของคุณ</p>
+            <p style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>Pre-screened ตามคณะและพื้นที่ของคุณ</p>
           </div>
           <button
             onClick={() => setActiveTab('surveys')}
@@ -112,7 +140,12 @@ export const ParticipantDashboard = ({ setActiveTab }) => {
               <div key={s.id} className="card card-hover" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                    <span className="badge badge-active">{s.category}</span>
+                    <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                      <span className="badge badge-active">{s.category}</span>
+                      {s.surveyType === 'external_google_forms' && (
+                        <span className="badge" style={{ background: '#EDE9FE', color: '#6D28D9', fontSize: '10px' }}>Google Forms</span>
+                      )}
+                    </div>
                     <span style={{ fontSize: '12px', color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
                       <Clock size={12} /> {s.estimatedTime}
                     </span>
@@ -143,7 +176,13 @@ export const ParticipantDashboard = ({ setActiveTab }) => {
                   </div>
 
                   <button
-                    onClick={() => setSelectedSurvey(s)}
+                    onClick={() => {
+                      if (!isVerified) {
+                        setShowKYCModal(true);
+                      } else {
+                        setSelectedSurvey(s);
+                      }
+                    }}
                     disabled={isCompleted}
                     className={`btn ${isCompleted ? 'btn-secondary' : 'btn-primary'}`}
                     style={{ width: '100%' }}
@@ -152,6 +191,8 @@ export const ParticipantDashboard = ({ setActiveTab }) => {
                       <>
                         <CheckCircle size={15} color="var(--color-success)" /> ตอบแบบสอบถามแล้ว
                       </>
+                    ) : !isVerified ? (
+                      'ยืนยันตัวตนเพื่อเริ่มทำ'
                     ) : (
                       <>
                         เริ่มตอบแบบสอบถาม <ArrowRight size={15} />
@@ -165,47 +206,7 @@ export const ParticipantDashboard = ({ setActiveTab }) => {
         </div>
       </div>
 
-      {/* Recent Ledger preview */}
-      <div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-          <h3 className="text-h3" style={{ fontSize: '18px' }}>ประวัติรางวัลและการเงินล่าสุด</h3>
-          <button
-            onClick={() => setActiveTab('rewards')}
-            style={{ fontSize: '13px', color: 'var(--color-primary)', fontWeight: 600 }}
-          >
-            ดูประวัติทั้งหมด
-          </button>
-        </div>
-
-        <div className="card" style={{ padding: '0', overflow: 'hidden' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-            <thead>
-              <tr style={{ background: '#F8FAFC', borderBottom: '1px solid var(--color-border)', textAlign: 'left' }}>
-                <th style={{ padding: '12px 20px', color: 'var(--color-text-muted)', fontWeight: 600 }}>รายการ</th>
-                <th style={{ padding: '12px 20px', color: 'var(--color-text-muted)', fontWeight: 600 }}>วันที่</th>
-                <th style={{ padding: '12px 20px', color: 'var(--color-text-muted)', fontWeight: 600, textAlign: 'right' }}>จำนวนเงิน</th>
-                <th style={{ padding: '12px 20px', color: 'var(--color-text-muted)', fontWeight: 600, textAlign: 'center' }}>สถานะ</th>
-              </tr>
-            </thead>
-            <tbody>
-              {transactions.slice(0, 3).map((tx) => (
-                <tr key={tx.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
-                  <td style={{ padding: '14px 20px', fontWeight: 500 }}>{tx.title}</td>
-                  <td style={{ padding: '14px 20px', color: 'var(--color-text-muted)' }}>{tx.date}</td>
-                  <td style={{ padding: '14px 20px', textAlign: 'right', fontWeight: 700, color: tx.amount > 0 ? 'var(--color-success)' : '#DC2626' }}>
-                    {tx.amount > 0 ? `+฿${tx.amount}` : `฿${tx.amount}`}
-                  </td>
-                  <td style={{ padding: '14px 20px', textAlign: 'center' }}>
-                    <span className="badge badge-active" style={{ fontSize: '11px' }}>{tx.status}</span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* Survey Runner Modal */}
+      {/* Modals */}
       {selectedSurvey && (
         <SurveyRunnerModal
           survey={selectedSurvey}
@@ -213,9 +214,16 @@ export const ParticipantDashboard = ({ setActiveTab }) => {
         />
       )}
 
-      {/* Withdrawal Modal */}
       {showWithdrawModal && (
         <WithdrawalModal onClose={() => setShowWithdrawModal(false)} />
+      )}
+
+      {showKYCModal && (
+        <KYCModal onClose={() => setShowKYCModal(false)} />
+      )}
+
+      {showDemoModal && (
+        <DemographicModal onClose={() => setShowDemoModal(false)} />
       )}
     </div>
   );
