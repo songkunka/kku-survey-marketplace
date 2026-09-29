@@ -1,5 +1,6 @@
 import React from 'react';
 import { useApp } from '../../context/AppContext';
+import { useAuth } from '../../context/AuthContext';
 import {
   LayoutDashboard,
   FileText,
@@ -15,7 +16,8 @@ import {
 } from 'lucide-react';
 
 export const Sidebar = ({ activeTab, setActiveTab }) => {
-  const { currentRole, surveys, participant } = useApp();
+  const { surveys, participant, kycQueue } = useApp();
+  const { currentMode, isAdmin } = useAuth();
 
   const participantNav = [
     { id: 'dashboard', label: 'Dashboard ภาพรวม', icon: LayoutDashboard },
@@ -30,33 +32,37 @@ export const Sidebar = ({ activeTab, setActiveTab }) => {
   ];
 
   const researcherNav = [
-    { id: 'dashboard', label: 'Dashboard สรุปผล', icon: LayoutDashboard },
-    { id: 'projects', label: 'โปรเจกต์ของฉัน', icon: FolderKanban, badge: surveys.length },
+    { id: 'dashboard', label: 'Dashboard ภาพรวม', icon: LayoutDashboard },
+    { id: 'projects', label: 'โปรเจกต์ที่ฉันสร้าง', icon: FolderKanban, badge: surveys.length },
     { id: 'create', label: 'สร้างโปรเจกต์ใหม่', icon: PlusCircle, highlight: true },
-    { id: 'billing', label: 'งบประมาณ & การเงิน', icon: CreditCard }
+    { id: 'billing', label: 'งบวิจัย & การเงิน', icon: CreditCard }
   ];
 
   const adminNav = [
     { id: 'dashboard', label: 'ภาพรวมระบบ Admin', icon: LayoutDashboard },
-    { id: 'verification', label: 'ตรวจยืนยันตัวตน (KYC)', icon: Users, badge: 3 },
+    { id: 'verification', label: 'ตรวจบัตรประชาชน (e-KYC)', icon: Users, badge: kycQueue.length },
     { id: 'reviews', label: 'อนุมัติแบบสอบถาม', icon: CheckSquare, badge: 2 },
-    { id: 'withdrawals', label: 'คำขอถอนเงิน', icon: Wallet, badge: 5 },
+    { id: 'withdrawals', label: 'คำขอถอนเงิน', icon: Wallet, badge: 2 },
     { id: 'fraud', label: 'ตรวจจับ Fraud & บอท', icon: AlertTriangle, badge: 1 }
   ];
 
-  const navItems = currentRole === 'participant'
-    ? participantNav
-    : currentRole === 'researcher'
+  const effectiveMode = activeTab === 'admin' ? 'admin' : currentMode;
+
+  const navItems = effectiveMode === 'admin'
+    ? adminNav
+    : currentMode === 'researcher'
     ? researcherNav
-    : adminNav;
+    : participantNav;
 
   return (
     <aside className="layout-sidebar">
       <div style={{ padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
         <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-text-light)', padding: '0 8px 8px 8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-          {currentRole === 'participant' && 'เมนูผู้ตอบแบบสอบถาม'}
-          {currentRole === 'researcher' && 'เมนูนักวิจัย / เจ้าของโปรเจกต์'}
-          {currentRole === 'admin' && 'เมนูผู้ดูแลระบบ (Admin)'}
+          {effectiveMode === 'admin'
+            ? 'แผงควบคุมแอดมิน (Admin)'
+            : currentMode === 'researcher'
+            ? 'โหมดนักวิจัย (Researcher)'
+            : 'โหมดผู้ตอบแบบสอบถาม'}
         </div>
 
         {navItems.map((item) => {
@@ -122,7 +128,7 @@ export const Sidebar = ({ activeTab, setActiveTab }) => {
       <div style={{ padding: '16px', borderTop: '1px solid var(--color-border)', backgroundColor: '#F8FAFC' }}>
         <div style={{ fontSize: '11px', color: 'var(--color-text-muted)', lineHeight: '1.4' }}>
           <strong>KKU Research Shield</strong><br />
-          ป้องกันข้อมูลรั่วไหล และคัดกรองกลุ่มตัวอย่างที่มีคุณภาพสูง
+          บัญชีเดี่ยว 1 คน 1 สิทธิ์ พร้อมระบบคุ้มครองข้อมูล PDPA
         </div>
       </div>
     </aside>

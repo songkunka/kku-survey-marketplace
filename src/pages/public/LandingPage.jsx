@@ -1,5 +1,5 @@
 import React from 'react';
-import { useApp } from '../../context/AppContext';
+import { useAuth } from '../../context/AuthContext';
 import {
   ShieldCheck,
   CheckCircle2,
@@ -10,11 +10,27 @@ import {
   Lock,
   Clock,
   Sparkles,
-  HelpCircle
+  HelpCircle,
+  FolderKanban,
+  Coins
 } from 'lucide-react';
 
-export const LandingPage = () => {
-  const { setCurrentRole } = useApp();
+export const LandingPage = ({ onNavigate }) => {
+  const { isAuthenticated, switchMode } = useAuth();
+
+  const handleStartParticipant = () => {
+    switchMode('participant');
+    if (onNavigate) {
+      onNavigate(isAuthenticated ? 'surveys' : 'register');
+    }
+  };
+
+  const handleStartResearcher = () => {
+    switchMode('researcher');
+    if (onNavigate) {
+      onNavigate(isAuthenticated ? 'projects' : 'register');
+    }
+  };
 
   return (
     <div style={{ backgroundColor: '#FFFFFF' }}>
@@ -42,7 +58,7 @@ export const LandingPage = () => {
               marginBottom: '20px'
             }}
           >
-            <Sparkles size={14} /> นวัตกรรมเพื่อชีวิตนักศึกษา มหาวิทยาลัยขอนแก่น (KKU Student Life Innovation)
+            <Sparkles size={14} /> แพลตฟอร์มวิจัยและกลุ่มตัวอย่าง มหาวิทยาลัยขอนแก่น (KKU Student Life Innovation)
           </div>
 
           <h1
@@ -63,23 +79,23 @@ export const LandingPage = () => {
               margin: '0 auto 36px auto'
             }}
           >
-            เปลี่ยนการขอคนช่วยตอบแบบสอบถามใน Facebook Group เป็นระบบที่มีมาตรฐาน <br />
-            นักวิจัยได้กลุ่มตัวอย่างตรงเป้าหมาย ไร้คนตอบซ้ำ — นักศึกษาได้รับค่าตอบแทนที่โปร่งใส ถอนได้จริง
+            บัญชีเดียว ทำได้ทั้งตอบแบบสอบถามเพื่อรับเงินรางวัลจริง และสร้างแบบสอบถามสำหรับงานวิจัยของคุณ <br />
+            คัดกรองกลุ่มตัวอย่างตรงสเปก ไร้คนตอบซ้ำ ปลอดภัยด้วยการยืนยันตัวตนบัตรประชาชน (e-KYC)
           </p>
 
           <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
             <button
-              onClick={() => setCurrentRole('participant')}
+              onClick={handleStartParticipant}
               className="btn btn-primary btn-lg"
               style={{ boxShadow: '0 4px 14px rgba(37,99,235,0.3)' }}
             >
-              เริ่มต้นตอบแบบสอบถาม (สำหรับผู้ตอบ) <ArrowRight size={18} />
+              เริ่มต้นตอบแบบสอบถาม (รับรางวัล) <ArrowRight size={18} />
             </button>
             <button
-              onClick={() => setCurrentRole('researcher')}
+              onClick={handleStartResearcher}
               className="btn btn-secondary btn-lg"
             >
-              สร้างโปรเจกต์งานวิจัย (สำหรับ Researcher)
+              สร้างแบบสอบถามงานวิจัย (สำหรับคนทำวิจัย)
             </button>
           </div>
 
@@ -102,7 +118,7 @@ export const LandingPage = () => {
             </div>
             <div>
               <div style={{ fontSize: '28px', fontWeight: 800, color: 'var(--color-primary)' }}>100%</div>
-              <div style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>ป้องกันการตอบซ้ำ (Duplicate Prevention)</div>
+              <div style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>บล็อกคนตอบซ้ำ (Unique ID Lock)</div>
             </div>
             <div>
               <div style={{ fontSize: '28px', fontWeight: 800, color: 'var(--color-primary)' }}>8,500+</div>
@@ -162,89 +178,47 @@ export const LandingPage = () => {
             </div>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '14px', color: '#1E3A8A' }}>
               <li>• กำหนดเป้าหมาย 400 คน ระบบจัดส่งถึงผู้ตอบตรงกลุ่มทันที</li>
-              <li>• กรองสเปกได้แม่นยำ (คณะ, ชั้นปี, อายุ, พฤติกรรมเฉพาะ)</li>
+              <li>• กรองสเปกได้แม่นยำ (19 คณะใน มข., ชั้นปี, ย่านกังสดาล/หลังมอ)</li>
               <li>• <strong>Duplicate Lock:</strong> บล็อกไม่ให้คนเดิมตอบซ้ำ 100%</li>
-              <li>• ผู้ตอบได้รับค่าตอบแทนที่แน่นอน โปร่งใส ถอนเงินได้จริง</li>
+              <li>• ผู้ตอบได้รับค่าตอบแทนที่แน่นอน โปร่งใส ถอนเงินได้จริงผ่านพร้อมเพย์</li>
             </ul>
           </div>
         </div>
       </section>
 
-      {/* How it Works Section */}
+      {/* Trust & Safety Features */}
       <section style={{ padding: '64px 24px', backgroundColor: '#F8FAFC', borderTop: '1px solid var(--color-border)', borderBottom: '1px solid var(--color-border)' }}>
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-            <h2 className="text-h2" style={{ marginBottom: '8px' }}>กลไกการทำงานของแพลตฟอร์ม</h2>
+          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+            <h2 className="text-h2" style={{ marginBottom: '8px' }}>Trust & Safety Architecture</h2>
             <p style={{ color: 'var(--color-text-muted)', fontSize: '15px' }}>
-              ออกแบบให้ใช้งานง่ายทั้งสำหรับนักวิจัยและผู้ตอบแบบสอบถาม
+              ความน่าเชื่อถือคือหัวใจหลักของข้อมูลงานวิจัย
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '24px' }}>
-            <div className="card">
-              <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: 'var(--color-primary-light)', color: 'var(--color-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, marginBottom: '16px' }}>
-                1
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+            <div style={{ display: 'flex', gap: '14px' }}>
+              <div style={{ flexShrink: 0 }}><ShieldCheck size={26} color="var(--color-primary)" /></div>
+              <div>
+                <h4 style={{ fontSize: '15px', fontWeight: 600, marginBottom: '4px' }}>Participant Verification</h4>
+                <p style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>ยืนยันสถานะนักศึกษา มข. ด้วยบัตรประชาชน (e-KYC) เพื่อคัดกรองตัวตนจริง ไม่ใช่บัญชีผี</p>
               </div>
-              <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '8px' }}>Researcher ตั้งโควตา & งบ</h3>
-              <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
-                กำหนดจำนวนคนที่ต้องการ (เช่น 400 คน) และค่าตอบแทน (เช่น ฿2) ระบบคำนวณงบประมาณให้อัตโนมัติ (฿800)
-              </p>
             </div>
 
-            <div className="card">
-              <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: 'var(--color-primary-light)', color: 'var(--color-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, marginBottom: '16px' }}>
-                2
+            <div style={{ display: 'flex', gap: '14px' }}>
+              <div style={{ flexShrink: 0 }}><Lock size={26} color="var(--color-primary)" /></div>
+              <div>
+                <h4 style={{ fontSize: '15px', fontWeight: 600, marginBottom: '4px' }}>Budget Escrow Lock</h4>
+                <p style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>งบประมาณจะถูกล็อกไว้ในระบบก่อนเปิดรับคำตอบ การันตีผู้ตอบได้รับค่าตอบแทน 100%</p>
               </div>
-              <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '8px' }}>Matching สู่ผู้ตอบที่ตรงกลุ่ม</h3>
-              <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
-                แบบสอบถามจะถูกส่งไปยัง Marketplace ของนักศึกษา มข. ที่ผ่านการยืนยันตัวตนและมีคุณสมบัติตรงเป้าหมาย
-              </p>
             </div>
 
-            <div className="card">
-              <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: 'var(--color-primary-light)', color: 'var(--color-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, marginBottom: '16px' }}>
-                3
+            <div style={{ display: 'flex', gap: '14px' }}>
+              <div style={{ flexShrink: 0 }}><CheckCircle2 size={26} color="var(--color-primary)" /></div>
+              <div>
+                <h4 style={{ fontSize: '15px', fontWeight: 600, marginBottom: '4px' }}>Duplicate Prevention</h4>
+                <p style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>ระบบป้องกันไม่ให้ 1 รหัสประจำตัวทำแบบสอบถามเดิมซ้ำ เพื่อความเที่ยงตรงของสถิติวิจัย</p>
               </div>
-              <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '8px' }}>Quality Check & จ่ายรางวัล</h3>
-              <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
-                เมื่อทำเสร็จและผ่านการตรวจสอบ ผู้ตอบได้รับเครดิตทันที ส่วนระบบจะล็อกสิทธิ์เพื่อป้องกันการตอบซ้ำ
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Trust & Safety Features */}
-      <section style={{ padding: '64px 24px', maxWidth: '1000px', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <h2 className="text-h2" style={{ marginBottom: '8px' }}>Trust & Safety Architecture</h2>
-          <p style={{ color: 'var(--color-text-muted)', fontSize: '15px' }}>
-            ความน่าเชื่อถือคือหัวใจหลักของข้อมูลงานวิจัย
-          </p>
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
-          <div style={{ display: 'flex', gap: '14px' }}>
-            <div style={{ flexShrink: 0 }}><ShieldCheck size={26} color="var(--color-primary)" /></div>
-            <div>
-              <h4 style={{ fontSize: '15px', fontWeight: 600, marginBottom: '4px' }}>Participant Verification</h4>
-              <p style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>ยืนยันสถานะนักศึกษา มข. เพื่อคัดกรองตัวตนจริง ไม่ใช่บัญชีผีหรือบอท</p>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', gap: '14px' }}>
-            <div style={{ flexShrink: 0 }}><Lock size={26} color="var(--color-primary)" /></div>
-            <div>
-              <h4 style={{ fontSize: '15px', fontWeight: 600, marginBottom: '4px' }}>Budget Escrow Lock</h4>
-              <p style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>Researcher ต้องฝากงบไว้ล่วงหน้า การันตีผู้ตอบจะได้รับค่าตอบแทนแน่นอน 100%</p>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', gap: '14px' }}>
-            <div style={{ flexShrink: 0 }}><CheckCircle2 size={26} color="var(--color-primary)" /></div>
-            <div>
-              <h4 style={{ fontSize: '15px', fontWeight: 600, marginBottom: '4px' }}>Duplicate Prevention</h4>
-              <p style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>ระบบป้องกันไม่ให้ 1 รหัสประจำตัวทำแบบสอบถามเดิมซ้ำ เพื่อความเที่ยงตรงของสถิติ</p>
             </div>
           </div>
         </div>
@@ -253,17 +227,17 @@ export const LandingPage = () => {
       {/* Footer Call to Action */}
       <section style={{ padding: '60px 24px', background: '#0F172A', color: '#FFFFFF', textAlign: 'center' }}>
         <h2 style={{ fontSize: '28px', fontWeight: 700, marginBottom: '12px' }}>
-          พร้อมสัมผัสประสบการณ์ของระบบแล้วหรือยัง?
+          เข้าร่วมคอมมูนิตี้วิจัยและตอบแบบสอบถาม มข.
         </h2>
         <p style={{ color: '#94A3B8', fontSize: '15px', marginBottom: '28px' }}>
-          เลือกบทบาทจำลองเพื่อเริ่มทดลองใช้งาน Interactive Prototype ได้ทันที
+          สมัครครั้งเดียว ทำได้ทั้งตอบแบบสอบถามรับเงินรางวัล และสร้างโปรเจกต์งานวิจัยของคุณเอง
         </p>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '14px', flexWrap: 'wrap' }}>
-          <button onClick={() => setCurrentRole('participant')} className="btn btn-primary btn-lg">
-            ทดลองใช้งานเป็น Participant
+          <button onClick={handleStartParticipant} className="btn btn-primary btn-lg">
+            เริ่มต้นใช้งาน (Sign Up)
           </button>
-          <button onClick={() => setCurrentRole('researcher')} className="btn btn-secondary btn-lg" style={{ background: '#1E293B', color: '#FFFFFF', borderColor: '#334155' }}>
-            ทดลองใช้งานเป็น Researcher
+          <button onClick={() => onNavigate && onNavigate('login')} className="btn btn-secondary btn-lg" style={{ background: '#1E293B', color: '#FFFFFF', borderColor: '#334155' }}>
+            เข้าสู่ระบบ (Sign In)
           </button>
         </div>
       </section>
