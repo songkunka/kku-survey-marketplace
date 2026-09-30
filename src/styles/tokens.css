@@ -1,78 +1,48 @@
 :root {
-  /* Brand Primary & Accents (PlayStation Blue System from designref.md) */
-  --color-primary: #0070d1;
-  --color-primary-pressed: #0064b7;
-  --color-primary-active: #004d8d;
-  --color-on-primary: #ffffff;
+  /* Colors */
+  --color-primary: #2563EB;
+  --color-primary-dark: #1D4ED8;
+  --color-primary-light: #EFF6FF;
+  --color-primary-subtle: #DBEAFE;
   
-  /* Commerce & Bounty Orange (Store/Payout/Escrow from designref.md) */
-  --color-commerce: #d53b00;
-  --color-commerce-pressed: #aa2f00;
-  --color-on-commerce: #ffffff;
+  --color-bg: #F8FAFC;
+  --color-surface: #FFFFFF;
+  --color-surface-hover: #F1F5F9;
   
-  /* KKU Heritage Accent */
-  --color-kku-brick: #A73B24;
-  --color-kku-brick-hover: #8C2F1C;
-  --color-kku-brick-light: #FEF2F2;
+  --color-text-main: #0F172A;
+  --color-text-muted: #64748B;
+  --color-text-light: #94A3B8;
+  
+  --color-border: #E2E8F0;
+  --color-border-dark: #CBD5E1;
+  
+  --color-success: #16A34A;
+  --color-success-bg: #DCFCE7;
+  --color-success-text: #15803D;
+  
+  --color-warning: #D97706;
+  --color-warning-bg: #FEF3C7;
+  --color-warning-text: #B45309;
+  
+  --color-error: #DC2626;
+  --color-error-bg: #FEE2E2;
+  --color-error-text: #B91C1C;
 
-  /* Three-Canvas System */
-  --color-canvas-dark: #000000;
-  --color-surface-dark-elevated: #121314;
-  --color-surface-dark-card: #181818;
-  --color-charcoal: #1f2024;
-  
-  --color-canvas-light: #ffffff;
-  --color-surface-card: #f5f7fa;
-  --color-surface-soft: #f3f3f3;
-  --color-surface-filter: rgba(245, 247, 250, 0.85);
-
-  /* Hairlines & Dividers */
-  --color-hairline-light: #f3f3f3;
-  --color-hairline-dark: rgba(229, 229, 229, 0.2);
-  --color-border: #e2e8f0;
-  --color-border-dark: #cbd5e1;
-
-  /* Typography Text Colors */
-  --color-ink: #000000;
-  --color-ink-deep: #121314;
-  --color-body-light: rgba(0, 0, 0, 0.65);
-  --color-mute-light: #6b6b6b;
-  --color-ash-light: #cccccc;
-  
-  --color-on-dark: #ffffff;
-  --color-body-dark: rgba(255, 255, 255, 0.72);
-  --color-on-dark-mute: #cccccc;
-  --color-mute-dark: rgba(229, 229, 229, 0.55);
-
-  /* Semantic Accents */
-  --color-success: #059669;
-  --color-success-bg: #ecfdf5;
-  --color-success-text: #065f46;
-  
-  --color-warning: #d97706;
-  --color-warning-bg: #fffbeb;
-  --color-warning-text: #92400e;
-  
-  --color-error: #c81b3a;
-  --color-error-bg: #fef2f2;
-  --color-error-text: #991b1b;
-
-  /* Typography Stack */
+  /* Typography */
   --font-family: 'Inter', 'Noto Sans Thai', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-
-  /* Strict 4 / 8 / Pill Radii from designref.md */
-  --radius-none: 0px;
-  --radius-sm: 4px;       /* Inputs, controls */
-  --radius-md: 8px;       /* Product/Survey cards, panels */
-  --radius-lg: 16px;      /* Dialogs */
-  --radius-full: 9999px;  /* Every CTA Pill, filter chip, tag */
-
-  /* Elevation & Flat Precision */
-  --shadow-none: none;
-  --shadow-flat: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
-  --shadow-active: 0 4px 12px rgba(0, 0, 0, 0.12);
-  --shadow-overlay: 0 20px 40px -8px rgba(0, 0, 0, 0.25);
-
+  
+  /* Radii */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  
   /* Transitions */
   --transition-fast: 150ms ease;
   --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);

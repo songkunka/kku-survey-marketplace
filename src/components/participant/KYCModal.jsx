@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
-import { X, ShieldCheck, CheckCircle2, Clock, Image } from 'lucide-react';
+import { X, ShieldCheck, Upload, AlertCircle, CheckCircle2, Clock, FileText, Image } from 'lucide-react';
+import { kkuFaculties } from '../../data/mockData';
 
 export const KYCModal = ({ onClose }) => {
   const { participant, submitKYC } = useApp();
@@ -44,48 +45,40 @@ export const KYCModal = ({ onClose }) => {
 
   return (
     <div className="modal-backdrop">
-      <div className="modal-content max-w-lg w-full rounded-[8px] bg-white border border-[#f3f3f3]">
+      <div className="modal-content" style={{ maxWidth: '580px' }}>
         {/* Header */}
-        <div className="p-5 px-6 border-b border-[#f3f3f3] flex justify-between items-center bg-white rounded-t-[8px]">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-[#f5f7fa] text-[#0070d1] flex items-center justify-center">
+        <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: 'var(--color-primary-light)', color: 'var(--color-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <ShieldCheck size={20} />
             </div>
             <div>
-              <h3 className="text-base font-semibold text-black">ยืนยันตัวตนด้วยบัตรประชาชน (e-KYC)</h3>
-              <p className="text-xs text-[#6b6b6b]">เพื่อการันตีความเป็นนักศึกษาจริง และสิทธิ์รับเงินรางวัล</p>
+              <h3 className="text-h3" style={{ fontSize: '18px' }}>ยืนยันตัวตนด้วยบัตรประชาชน (e-KYC)</h3>
+              <p style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>เพื่อการันตีความเป็นนักศึกษาจริง และสิทธิ์รับเงินรางวัล</p>
             </div>
           </div>
-          <button
-            onClick={onClose}
-            className="text-[#6b6b6b] hover:text-black p-1.5 rounded-full hover:bg-[#f5f7fa] transition-colors"
-          >
-            <X size={20} />
-          </button>
+          <button onClick={onClose} style={{ color: 'var(--color-text-muted)' }}><X size={20} /></button>
         </div>
 
         {/* Content */}
-        <div className="p-6">
+        <div style={{ padding: '24px' }}>
           {/* Status View: Verified */}
           {isVerified && (
-            <div className="text-center py-5">
-              <div className="w-16 h-16 rounded-full bg-[#ecfdf5] text-[#059669] flex items-center justify-center mx-auto mb-4">
-                <CheckCircle2 size={36} />
+            <div style={{ textAlign: 'center', padding: '16px 0' }}>
+              <div style={{ width: '60px', height: '60px', borderRadius: '50%', backgroundColor: 'var(--color-success-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px auto' }}>
+                <CheckCircle2 size={36} color="var(--color-success)" />
               </div>
-              <h4 className="text-lg font-light text-black mb-2">
+              <h4 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--color-text-main)', marginBottom: '8px' }}>
                 บัญชีของคุณผ่านการยืนยันตัวตนแล้ว (Verified)
               </h4>
-              <p className="text-xs sm:text-sm text-[#6b6b6b] leading-relaxed mb-6 font-normal">
-                เลขบัตรประชาชน: <strong className="text-black">{participant.idCardNumber}</strong><br />
-                รหัสนักศึกษา: <strong className="text-black">{participant.studentId}</strong> ({participant.faculty})
+              <p style={{ fontSize: '14px', color: 'var(--color-text-muted)', lineHeight: 1.5, marginBottom: '20px' }}>
+                เลขบัตรประชาชน: <strong>{participant.idCardNumber}</strong><br />
+                รหัสนักศึกษา: <strong>{participant.studentId}</strong> ({participant.faculty})
               </p>
-              <div className="bg-[#f5f7fa] p-4 rounded-[4px] border border-[#e2e8f0] text-xs text-[#6b6b6b] mb-6 text-left leading-relaxed">
-                🔒 <strong>PDPA Protected:</strong> ข้อมูลเลขบัตรและภาพถ่ายถูกเข้ารหัสระดับ AES-256 ผู้วิจัยจะไม่สามารถเข้าถึงข้อมูลส่วนบุคคลของคุณได้
+              <div style={{ backgroundColor: '#F8FAFC', padding: '14px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-border)', fontSize: '13px', color: 'var(--color-text-muted)', marginBottom: '20px' }}>
+                🔒 <strong>PDPA Protected:</strong> ข้อมูลเลขบัตรและรูปภาพถูกเข้ารหัสระดับ AES-256 ผู้วิจัยจะไม่สามารถเข้าถึงข้อมูลส่วนตัวของคุณได้
               </div>
-              <button
-                onClick={onClose}
-                className="btn-pill btn-pill-primary w-full justify-center"
-              >
+              <button onClick={onClose} className="btn btn-primary" style={{ width: '100%' }}>
                 ปิดหน้าต่าง
               </button>
             </div>
@@ -93,23 +86,20 @@ export const KYCModal = ({ onClose }) => {
 
           {/* Status View: Pending */}
           {isPending && (
-            <div className="text-center py-5">
-              <div className="w-16 h-16 rounded-full bg-[#fffbeb] text-[#d97706] flex items-center justify-center mx-auto mb-4">
-                <Clock size={36} />
+            <div style={{ textAlign: 'center', padding: '16px 0' }}>
+              <div style={{ width: '60px', height: '60px', borderRadius: '50%', backgroundColor: 'var(--color-warning-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px auto' }}>
+                <Clock size={36} color="var(--color-warning)" />
               </div>
-              <h4 className="text-lg font-light text-[#92400e] mb-2">
+              <h4 style={{ fontSize: '18px', fontWeight: 700, color: '#92400E', marginBottom: '8px' }}>
                 เอกสารอยู่ระหว่างการตรวจสอบ (Pending Review)
               </h4>
-              <p className="text-xs sm:text-sm text-[#6b6b6b] leading-relaxed mb-6">
+              <p style={{ fontSize: '14px', color: 'var(--color-text-muted)', lineHeight: 1.5, marginBottom: '20px' }}>
                 ระบบได้รับข้อมูลและภาพบัตรของคุณเรียบร้อยแล้ว แอดมินกำลังตรวจสอบความถูกต้องของข้อมูล (มักใช้เวลาไม่เกิน 15-30 นาที)
               </p>
-              <div className="bg-[#fffbeb] border border-[#fde68a] p-4 rounded-[4px] text-xs text-[#92400e] mb-6 text-left leading-relaxed">
-                💡 <strong>เคล็ดลับสำหรับการทดสอบ (Demo):</strong> คุณสามารถสลับเป็น <strong>Admin</strong> ในเมนูโปรไฟล์ เพื่อกด "อนุมัติบัตร" ในระบบได้ทันที!
+              <div style={{ background: '#FFFBEB', border: '1px solid #FDE68A', padding: '14px', borderRadius: 'var(--radius-sm)', fontSize: '12px', color: '#B45309', marginBottom: '20px', textAlign: 'left' }}>
+                💡 <strong>เคล็ดลับสำหรับการทดสอบ (Demo):</strong> คุณสามารถสลับเป็น <strong>Admin</strong> ในแถบด้านบน เพื่อกด "อนุมัติบัตร" นี้ได้ทันที!
               </div>
-              <button
-                onClick={onClose}
-                className="btn-pill btn-pill-secondary-light w-full justify-center"
-              >
+              <button onClick={onClose} className="btn btn-secondary" style={{ width: '100%' }}>
                 รับทราบ
               </button>
             </div>
@@ -117,9 +107,9 @@ export const KYCModal = ({ onClose }) => {
 
           {/* Status View: Unverified (Upload Form) */}
           {!isVerified && !isPending && (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-xs font-semibold text-black mb-1.5 uppercase tracking-wider">
+            <form onSubmit={handleSubmit}>
+              <div style={{ marginBottom: '18px' }}>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>
                   เลขประจำตัวประชาชน 13 หลัก *
                 </label>
                 <input
@@ -128,33 +118,33 @@ export const KYCModal = ({ onClose }) => {
                   value={idNumber}
                   onChange={(e) => setIdNumber(e.target.value)}
                   required
-                  className="w-full px-4 py-3 rounded-[4px] border border-[#cbd5e1] text-sm font-semibold tracking-wider focus:outline-none focus:border-[#0070d1] bg-white"
+                  style={{ width: '100%', padding: '10px 14px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-border)', fontSize: '15px', fontWeight: 600 }}
                 />
-                <div className="text-[11px] text-[#6b6b6b] mt-1">
+                <div style={{ fontSize: '11px', color: 'var(--color-text-muted)', marginTop: '4px' }}>
                   * ระบบจำกัด 1 เลขบัตรประชาชน ต่อ 1 บัญชีผู้ใช้งานเท่านั้น (ป้องกันบัญชีผี)
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '18px' }}>
                 <div>
-                  <label className="block text-xs font-semibold text-black mb-1.5 uppercase tracking-wider">
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>
                     รหัสนักศึกษา มข.
                   </label>
                   <input
                     type="text"
                     value={studentId}
                     onChange={(e) => setStudentId(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-[4px] border border-[#cbd5e1] text-sm focus:outline-none focus:border-[#0070d1] bg-white"
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-border)' }}
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-black mb-1.5 uppercase tracking-wider">
+                  <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>
                     ระดับชั้นปี
                   </label>
                   <select
                     value={year}
                     onChange={(e) => setYear(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-[4px] border border-[#cbd5e1] text-sm focus:outline-none focus:border-[#0070d1] bg-white"
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-border)', backgroundColor: '#FFFFFF' }}
                   >
                     <option value="ชั้นปีที่ 1">ชั้นปีที่ 1</option>
                     <option value="ชั้นปีที่ 2">ชั้นปีที่ 2</option>
@@ -167,53 +157,42 @@ export const KYCModal = ({ onClose }) => {
               </div>
 
               {/* ID Card Image Upload / Picker */}
-              <div>
-                <label className="block text-xs font-semibold text-black mb-1.5 uppercase tracking-wider">
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }}>
                   รูปภาพบัตรประชาชน / บัตรนักศึกษาด้านหน้า *
                 </label>
-                <div className="border border-dashed border-[#cbd5e1] rounded-[8px] p-4 text-center bg-[#f5f7fa] mb-3">
+                <div style={{ border: '2px dashed var(--color-border)', borderRadius: 'var(--radius-sm)', padding: '16px', textAlign: 'center', background: '#F8FAFC', marginBottom: '10px' }}>
                   <img
                     src={selectedMockImage}
                     alt="ID Card Preview"
-                    className="max-h-36 max-w-full rounded-[4px] object-cover mx-auto mb-2 shadow-sm"
+                    style={{ maxHeight: '140px', maxWidth: '100%', borderRadius: '6px', objectFit: 'cover', margin: '0 auto 10px auto', display: 'block', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}
                   />
-                  <div className="text-[11px] text-[#6b6b6b]">
+                  <div style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
                     ตัวอย่างรูปบัตรที่จะใช้ส่งตรวจ
                   </div>
                 </div>
 
                 {/* Sample selector */}
-                <div className="flex gap-2 flex-wrap">
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                   {mockSamples.map((s, idx) => (
                     <button
                       type="button"
                       key={idx}
                       onClick={() => setSelectedMockImage(s.url)}
-                      className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${
-                        selectedMockImage === s.url
-                          ? 'bg-[#0070d1] text-white border-[#0070d1]'
-                          : 'bg-white text-black border-[#cbd5e1] hover:bg-[#f5f7fa]'
-                      }`}
+                      className={`btn btn-sm ${selectedMockImage === s.url ? 'btn-primary' : 'btn-secondary'}`}
+                      style={{ fontSize: '11px', padding: '4px 10px' }}
                     >
-                      <Image size={11} className="inline mr-1" /> {s.label}
+                      <Image size={12} /> {s.label}
                     </button>
                   ))}
                 </div>
               </div>
 
-              <div className="flex gap-3 justify-end border-t border-[#f3f3f3] pt-5 mt-6">
-                <button
-                  type="button"
-                  onClick={onClose}
-                  className="btn-pill btn-pill-secondary-light btn-pill-sm text-xs"
-                >
+              <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', borderTop: '1px solid var(--color-border)', paddingTop: '16px' }}>
+                <button type="button" onClick={onClose} className="btn btn-secondary">
                   ยกเลิก
                 </button>
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="btn-pill btn-pill-primary btn-pill-sm text-xs"
-                >
+                <button type="submit" disabled={isSubmitting} className="btn btn-primary">
                   {isSubmitting ? 'กำลังส่งข้อมูล...' : 'ส่งเอกสารยืนยันตัวตน'}
                 </button>
               </div>

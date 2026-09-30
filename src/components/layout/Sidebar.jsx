@@ -9,6 +9,7 @@ import {
   PlusCircle,
   FolderKanban,
   CreditCard,
+  ShieldCheck,
   AlertTriangle,
   Users,
   CheckSquare
@@ -16,7 +17,7 @@ import {
 
 export const Sidebar = ({ activeTab, setActiveTab }) => {
   const { surveys, participant, kycQueue } = useApp();
-  const { currentMode } = useAuth();
+  const { currentMode, isAdmin } = useAuth();
 
   const participantNav = [
     { id: 'dashboard', label: 'Dashboard ภาพรวม', icon: LayoutDashboard },
@@ -54,9 +55,9 @@ export const Sidebar = ({ activeTab, setActiveTab }) => {
     : participantNav;
 
   return (
-    <aside className="layout-sidebar bg-white border-r border-[#f3f3f3]">
-      <div className="p-4 flex flex-col gap-1.5 flex-1">
-        <div className="text-[11px] font-bold text-[#6b6b6b] px-3 py-2 uppercase tracking-wider">
+    <aside className="layout-sidebar">
+      <div style={{ padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
+        <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-text-light)', padding: '0 8px 8px 8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
           {effectiveMode === 'admin'
             ? 'แผงควบคุมแอดมิน (Admin)'
             : currentMode === 'researcher'
@@ -72,27 +73,49 @@ export const Sidebar = ({ activeTab, setActiveTab }) => {
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`flex items-center justify-between px-3.5 py-2.5 rounded-[8px] text-xs font-semibold transition-all ${
-                isActive
-                  ? 'bg-[#f5f7fa] text-[#0070d1] border-l-2 border-[#0070d1]'
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '10px 14px',
+                borderRadius: 'var(--radius-sm)',
+                fontSize: '14px',
+                fontWeight: isActive ? 600 : 500,
+                color: isActive 
+                  ? 'var(--color-primary)' 
+                  : item.highlight 
+                  ? '#1D4ED8' 
+                  : 'var(--color-text-main)',
+                backgroundColor: isActive 
+                  ? 'var(--color-primary-light)' 
                   : item.highlight
-                  ? 'bg-[#fff1eb] text-[#d53b00] hover:bg-[#ffe5db]'
-                  : 'text-black hover:bg-[#f5f7fa]'
-              }`}
+                  ? '#EFF6FF'
+                  : 'transparent',
+                textAlign: 'left',
+                border: item.highlight && !isActive ? '1px dashed #BFDBFE' : 'none',
+                transition: 'all var(--transition-fast)'
+              }}
+              onMouseEnter={(e) => {
+                if (!isActive) e.currentTarget.style.backgroundColor = 'var(--color-surface-hover)';
+              }}
+              onMouseLeave={(e) => {
+                if (!isActive) e.currentTarget.style.backgroundColor = item.highlight ? '#EFF6FF' : 'transparent';
+              }}
             >
-              <div className="flex items-center gap-2.5">
-                <Icon size={16} className={isActive ? 'text-[#0070d1]' : item.highlight ? 'text-[#d53b00]' : 'text-[#6b6b6b]'} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <Icon size={18} color={isActive ? 'var(--color-primary)' : 'var(--color-text-muted)'} />
                 <span>{item.label}</span>
               </div>
               {item.badge !== undefined && item.badge > 0 && (
                 <span
-                  className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${
-                    isActive
-                      ? 'bg-[#0070d1] text-white'
-                      : item.highlight
-                      ? 'bg-[#d53b00] text-white'
-                      : 'bg-[#e2e8f0] text-black'
-                  }`}
+                  style={{
+                    backgroundColor: isActive ? 'var(--color-primary)' : '#E2E8F0',
+                    color: isActive ? '#FFFFFF' : '#475569',
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    padding: '2px 7px',
+                    borderRadius: '10px'
+                  }}
                 >
                   {item.badge}
                 </span>
@@ -102,9 +125,9 @@ export const Sidebar = ({ activeTab, setActiveTab }) => {
         })}
       </div>
 
-      <div className="p-4 border-t border-[#f3f3f3] bg-[#f5f7fa]">
-        <div className="text-xs text-[#6b6b6b] leading-relaxed">
-          <strong className="text-black">KKU Research Shield</strong><br />
+      <div style={{ padding: '16px', borderTop: '1px solid var(--color-border)', backgroundColor: '#F8FAFC' }}>
+        <div style={{ fontSize: '11px', color: 'var(--color-text-muted)', lineHeight: '1.4' }}>
+          <strong>KKU Research Shield</strong><br />
           บัญชีเดี่ยว 1 คน 1 สิทธิ์ พร้อมระบบคุ้มครองข้อมูล PDPA
         </div>
       </div>
